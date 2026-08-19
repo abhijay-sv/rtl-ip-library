@@ -10,7 +10,7 @@ interface apb_if
     logic [ADDR_WIDTH-1:0]   paddr;
     logic [2:0]              pprot;
     logic [DATA_WIDTH-1:0]   pwdata;
-    logic [DATA_WIDTH/8-1:0] pstrobe;
+    logic [DATA_WIDTH/8-1:0] pstrb;
     logic [DATA_WIDTH-1:0]   prdata;
     logic psel;
     logic penable;
@@ -22,17 +22,17 @@ interface apb_if
     modport manager (
         input  pclk, preset_n,
         input  pready, prdata, pslverr,
-        output paddr, pprot, penable, pwdata, pstrobe, psel, pwrite, pwakeup
+        output paddr, pprot, penable, pwdata, pstrb, psel, pwrite, pwakeup
     );
 
     modport subordinate (
         input  pclk, preset_n,
-        input  paddr, pprot, penable, pwdata, pstrobe, psel, pwrite, pwakeup,
+        input  paddr, pprot, penable, pwdata, pstrb, psel, pwrite, pwakeup,
         output pready, prdata, pslverr
     );
 
     modport bridge (
-        input paddr,
+        input paddr, psel,
         output pready, prdata, pslverr
     );
 endinterface

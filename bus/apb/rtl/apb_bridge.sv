@@ -13,7 +13,7 @@ module apb_bridge
     input  logic [DATA_WIDTH-1:0] prdata_in [NUM_SUBORDINATES],
     input  logic pslverr_in [NUM_SUBORDINATES],
     output logic psel_out [NUM_SUBORDINATES],
-    
+
     apb_if.bridge apb
 );
 
@@ -28,7 +28,7 @@ module apb_bridge
                 apb.pready = pready_in[i];
                 apb.prdata = prdata_in[i];
                 apb.pslverr = pslverr_in[i];
-                psel_out[i] = 1'd1;
+                psel_out[i] = apb.psel;
             end
         end
     end

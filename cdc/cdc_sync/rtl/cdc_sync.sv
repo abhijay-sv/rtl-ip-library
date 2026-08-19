@@ -14,7 +14,7 @@ module cdc_sync
     assign sync_out = sync_regs[SYNC_STAGES-1];
 
     always_ff @ (posedge clk, negedge rst_n) begin
-        if (~rst_n) begin
+        if (!rst_n) begin
             for (int i = 0; i < SYNC_STAGES; i++) begin
                 sync_regs[i] <= '0;
             end

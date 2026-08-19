@@ -41,7 +41,7 @@ module async_fifo
     
 
     always_ff @ (posedge rclk, negedge rrst_n) begin : RCLK
-        if (~rrst_n) begin
+        if (!rrst_n) begin
             b_rptr <= '0;
             g_rptr <= '0;
             data_out <= '0;
