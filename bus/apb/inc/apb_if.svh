@@ -32,7 +32,7 @@ interface apb_if
     );
 
     modport bridge (
-        input paddr, psel,
+        input  paddr, pprot, penable, pwdata, pstrb, psel, pwrite, pwakeup,
         output pready, prdata, pslverr
     );
 endinterface

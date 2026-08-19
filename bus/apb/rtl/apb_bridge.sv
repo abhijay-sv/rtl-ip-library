@@ -9,26 +9,30 @@ module apb_bridge
     parameter logic [ADDR_WIDTH-1:0] ADDR_SIZE [NUM_SUBORDINATES]
 )
 (
-    input  logic pready_in [NUM_SUBORDINATES],
-    input  logic [DATA_WIDTH-1:0] prdata_in [NUM_SUBORDINATES],
-    input  logic pslverr_in [NUM_SUBORDINATES],
-    output logic psel_out [NUM_SUBORDINATES],
-
-    apb_if.bridge apb
+    apb_if.bridge  apb,
+    apb_if.manager sub_apb [NUM_SUBORDINATES]
 );
 
     always_comb begin
-        apb.pready = 1'd0;
-        apb.prdata = '0;
+        apb.pready  = 1'd0;
+        apb.prdata  = '0;
         apb.pslverr = 1'd0;
-        psel_out = '0;
 
         for (int i = 0; i < NUM_SUBORDINATES; i++) begin
-            if ((paddr >= BASE_ADDR[i]) && (paddr < BASE_ADDR[i] + ADDR_SIZE[i])) begin
-                apb.pready = pready_in[i];
-                apb.prdata = prdata_in[i];
-                apb.pslverr = pslverr_in[i];
-                psel_out[i] = apb.psel;
+            sub_apb[i].paddr   = apb.paddr;
+            sub_apb[i].pwdata  = apb.pwdata;
+            sub_apb[i].pwrite  = apb.pwrite;
+            sub_apb[i].penable = apb.penable;
+            sub_apb[i].pprot   = apb.pprot;
+            sub_apb[i].pstrb   = apb.pstrb;
+            sub_apb[i].pwakeup = apb.pwakeup;
+
+            sub_apb[i].psel = apb.psel && (apb.paddr >= BASE_ADDR[i]) && (apb.paddr < BASE_ADDR[i] + ADDR_SIZE[i]);
+
+            if (sub_apb[i].psel) begin
+                apb.pready  = sub_apb[i].pready;
+                apb.prdata  = sub_apb[i].prdata;
+                apb.pslverr = sub_apb[i].pslverr;
             end
         end
     end
