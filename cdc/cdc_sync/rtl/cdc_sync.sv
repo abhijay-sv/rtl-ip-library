@@ -1,4 +1,4 @@
-module cdc_sync
+module cdc_sync 
 #(
     parameter WIDTH = 1,
     parameter SYNC_STAGES = 2
