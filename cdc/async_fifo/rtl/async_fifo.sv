@@ -18,13 +18,32 @@ module async_fifo
     logic [ADDR_WIDTH:0] rptr_overflow_val;
     logic [DATA_WIDTH-1:0] fifo_data [FIFO_DEPTH];
     logic next_full, next_empty;
+    logic raw_rst_n, wsync_rst_n, rsync_rst_n;
+
+    assign raw_rst_n = wrst_n & rrst_n; //Get the shared rst_n so that both pointers reset if either does.
+
+    rst_sync #(
+        .SYNC_STAGES(SYNC_STAGES)
+    ) rst_wsync (
+        .clk(wclk), 
+        .rst_n(raw_rst_n), 
+        .sync_rst_n(wsync_rst_n)
+    );
+
+    rst_sync #(
+        .SYNC_STAGES(SYNC_STAGES)
+    ) rst_rsync (
+        .clk(rclk), 
+        .rst_n(raw_rst_n), 
+        .sync_rst_n(rsync_rst_n)
+    );
 
     cdc_sync #(
         .WIDTH(ADDR_WIDTH + 1), 
         .SYNC_STAGES(SYNC_STAGES)
     ) rptr_wsync (
         .clk(wclk), 
-        .rst_n(wrst_n), 
+        .rst_n(wsync_rst_n), 
         .async_in(g_rptr), 
         .sync_out(wsync_g_rptr)
     );
@@ -34,14 +53,14 @@ module async_fifo
         .SYNC_STAGES(SYNC_STAGES)
     ) wptr_rsync (
         .clk(rclk), 
-        .rst_n(rrst_n), 
+        .rst_n(rsync_rst_n), 
         .async_in(g_wptr), 
         .sync_out(rsync_g_wptr)
     );
     
 
-    always_ff @ (posedge rclk, negedge rrst_n) begin : RCLK
-        if (!rrst_n) begin
+    always_ff @ (posedge rclk, negedge rsync_rst_n) begin : RCLK
+        if (!rsync_rst_n) begin
             b_rptr <= '0;
             g_rptr <= '0;
             data_out <= '0;
@@ -64,8 +83,8 @@ module async_fifo
         next_empty = (r_en && !empty) ? (rsync_g_wptr == next_g_rptr) : (rsync_g_wptr == g_rptr); 
     end
 
-    always_ff @ (posedge wclk, negedge wrst_n) begin : WCLK
-        if (~wrst_n) begin
+    always_ff @ (posedge wclk, negedge wsync_rst_n) begin : WCLK
+        if (~wsync_rst_n) begin
             b_wptr <= '0;
             g_wptr <= '0;
             full <= 1'd0;
