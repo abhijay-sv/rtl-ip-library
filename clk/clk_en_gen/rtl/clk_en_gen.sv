@@ -1,4 +1,4 @@
-module clk_en_gen 
+module clk_en_gen //Outputs data enable signal
 #(
     parameter DIVISOR_WIDTH = 1
 )

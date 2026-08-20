@@ -30,9 +30,4 @@ interface apb_if
         input  paddr, pprot, penable, pwdata, pstrb, psel, pwrite, pwakeup,
         output pready, prdata, pslverr
     );
-
-    modport bridge (
-        input  paddr, pprot, penable, pwdata, pstrb, psel, pwrite, pwakeup,
-        output pready, prdata, pslverr
-    );
 endinterface
