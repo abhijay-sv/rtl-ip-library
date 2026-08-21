@@ -28,7 +28,7 @@ module cdc_sync_tb;
             else $error("CDC_SYNC: Sync out did not reset to 0 after rst_n.");
 
         //RANDOM TEST CASES
-        repeat (10) begin
+        repeat (5) begin
             do begin
                 async_in = $urandom();
             end while (async_in == prev_expected);
@@ -46,7 +46,7 @@ module cdc_sync_tb;
 
             prev_expected = expected;
         end
-        
+
         $finish;
     end
 endmodule

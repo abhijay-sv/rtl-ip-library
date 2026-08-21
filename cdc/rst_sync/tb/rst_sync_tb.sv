@@ -23,6 +23,7 @@ module rst_sync_tb;
         assert (sync_rst_n == 1'b0)
             else $error("RST_SYNC: sync_rst_n did not reset to 0 asynchronously.");
 
+        //REGULAR RESET SYNC 
         rst_n = 1;
         repeat (SYNC_STAGES - 1) begin
             @(posedge clk);
@@ -33,6 +34,7 @@ module rst_sync_tb;
         assert (sync_rst_n == 1'b1)
             else $error("RST_SYNC: sync_rst_n did not deassert after %0d cycles", SYNC_STAGES);
 
+        //RESET ASSERTED MID SYNC
         rst_n = 0;
         repeat (4) @(posedge clk);
         rst_n = 1;
@@ -42,6 +44,7 @@ module rst_sync_tb;
         assert (sync_rst_n == 1'b0)
             else $error("RST_SYNC: sync_rst_n did not reset to 0 asynchronously when reasserted mid-sync.");
 
+        //RESET ASSERTED MID CLK
         repeat (4) @(posedge clk);
         rst_n = 1;
         repeat (SYNC_STAGES) @(posedge clk);
@@ -50,7 +53,7 @@ module rst_sync_tb;
         #1;
         assert (sync_rst_n == 1'b0)
             else $error("RST_SYNC: sync_rst_n did not reset to 0 asynchronously when asserted mid-clock.");
-
+        
         $finish;
     end
 endmodule
