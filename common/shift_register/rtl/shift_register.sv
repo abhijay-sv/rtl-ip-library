@@ -12,9 +12,9 @@ module shift_register
 
     initial begin
         assert (DATA_SIZE > 1)
-            else $fatal(1, "DATA_SIZE must be greater than 1");
+            else $fatal(1, "SHIFT_REGISTER: DATA_SIZE must be greater than 1");
         assert (SHIFT_MSB == 0 || SHIFT_MSB == 1)
-            else $fatal(1, "SHIFT_MSB must be 0 or 1");
+            else $fatal(1, "SHIFT_REGISTER: SHIFT_MSB must be 0 or 1");
     end
 
     always_ff @ (posedge clk, negedge rst_n) begin
@@ -40,6 +40,6 @@ module shift_register
 
     assert property (@(posedge clk) disable iff (!rst_n) 
         !(load_en && shift_en))
-        else $error("load_en and shift_en asserted simultaneously");
+        else $error("SHIFT_REGISTER: load_en and shift_en asserted simultaneously");
 
 endmodule

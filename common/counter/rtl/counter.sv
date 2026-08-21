@@ -27,12 +27,12 @@ module counter
 
     assert property (@(posedge clk) disable iff (!rst_n) 
         !(count_en && clear))
-        else $error("count_en and clear asserted simultaneously");
-    assert property (@(posedge clk) disable iff (!rst_n) 
+        else $error("COUNTER: count_en and clear asserted simultaneously");
+    assert property (@(posedge clk) disable iff (!rst_n)
         ($past(count_en) && count_en) |-> $stable(max_count))
-        else $error("max_count changed while counter enabled");
-    assert property (@(posedge clk) disable iff (!rst_n) 
+        else $error("COUNTER: max_count changed while counter enabled");
+    assert property (@(posedge clk) disable iff (!rst_n)
         $rose(count_en) |-> (max_count >= count))
-        else $error("max_count invalid on counter re-enable: max_count < count");
+        else $error("COUNTER: max_count invalid on counter re-enable: max_count < count");
 
 endmodule

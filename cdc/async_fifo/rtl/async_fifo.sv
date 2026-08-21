@@ -14,11 +14,11 @@ module async_fifo
 
     initial begin
         assert (DATA_WIDTH > 0)
-            else $fatal("DATA_WIDTH must be at least one bit.")
+            else $fatal("ASYNC_FIFO: DATA_WIDTH must be at least one bit.")
          assert (ADDR_WIDTH > 0)
-            else $fatal("ADDR_WIDTH must be at least one bit.")
+            else $fatal("ASYNC_FIFO: ADDR_WIDTH must be at least one bit.")
         assert (SYNC_STAGES >= 2)
-            else $fatal("SYNC_STAGES must be greater than or equal to two.")
+            else $fatal("ASYNC_FIFO: SYNC_STAGES must be greater than or equal to two.")
     end
 
     localparam FIFO_DEPTH = 1 << ADDR_WIDTH;
@@ -119,9 +119,9 @@ module async_fifo
 
     assert property ((@posedge rclk) disable iff (!rsync_rst_n) 
         !(r_en && empty))
-        else $error("Cannot read from FIFO while empty.");
-    assert property ((@posedge wclk) disable iff (!wsync_rst_n) 
+        else $error("ASYNC_FIFO: Cannot read from FIFO while empty.");
+    assert property ((@posedge wclk) disable iff (!wsync_rst_n)
         !(w_en && full))
-        else $error("Cannot write to FIFO while full.");
+        else $error("ASYNC_FIFO: Cannot write to FIFO while full.");
 
 endmodule

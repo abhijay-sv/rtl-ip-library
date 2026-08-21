@@ -11,9 +11,9 @@ module cdc_sync
 
     initial begin
         assert (WIDTH > 0)
-            else $fatal("WIDTH must be at least one bit.")
+            else $fatal("CDC_SYNC: WIDTH must be at least one bit.")
         assert (SYNC_STAGES >= 2)
-            else $fatal("SYNC_STAGES must be greater than or equal to two.")
+            else $fatal("CDC_SYNC: SYNC_STAGES must be greater than or equal to two.")
     end
 
     logic [WIDTH-1:0] sync_regs [SYNC_STAGES];

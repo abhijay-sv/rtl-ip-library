@@ -9,7 +9,7 @@ module rst_sync
 
     initial begin
         assert (SYNC_STAGES >= 2)
-            else $fatal("SYNC_STAGES must be greater than or equal to two.")
+            else $fatal("RST_SYNC: SYNC_STAGES must be greater than or equal to two.")
     end
 
     logic sync_regs [SYNC_STAGES];

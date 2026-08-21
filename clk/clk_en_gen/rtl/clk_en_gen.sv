@@ -24,5 +24,5 @@ module clk_en_gen //Outputs data enable signal
     );
 
     assert property (@(posedge clk) disable iff (!rst_n) gen_en |-> (divisor != 0))
-        else $error("divisior must not be 0 while gen_en is enabled");
+        else $error("CLK_EN_GEN: divisior must not be 0 while gen_en is enabled");
 endmodule
