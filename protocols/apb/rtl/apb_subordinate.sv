@@ -1,5 +1,5 @@
 `include "apb_if.svh"
-
+//TODO: add assertions
 module apb_subordinate
 #(
     parameter ADDR_WIDTH = 32,

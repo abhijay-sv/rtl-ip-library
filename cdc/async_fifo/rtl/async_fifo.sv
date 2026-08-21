@@ -11,6 +11,16 @@ module async_fifo
     output logic [DATA_WIDTH-1:0] data_out,
     output logic full, empty
 );
+
+    initial begin
+        assert (DATA_WIDTH > 0)
+            else $fatal("DATA_WIDTH must be at least one bit.")
+         assert (ADDR_WIDTH > 0)
+            else $fatal("ADDR_WIDTH must be at least one bit.")
+        assert (SYNC_STAGES >= 2)
+            else $fatal("SYNC_STAGES must be greater than or equal to two.")
+    end
+
     localparam FIFO_DEPTH = 1 << ADDR_WIDTH;
 
     logic [ADDR_WIDTH:0] b_wptr, g_wptr, next_b_wptr, next_g_wptr, wsync_g_rptr;
@@ -106,5 +116,12 @@ module async_fifo
         rptr_overflow_val = {~wsync_g_rptr[ADDR_WIDTH:ADDR_WIDTH-1], wsync_g_rptr[ADDR_WIDTH-2:0]};
         next_full = (w_en && !full) ? (rptr_overflow_val == next_g_wptr) : (rptr_overflow_val == g_wptr); 
     end
+
+    assert property ((@posedge rclk) disable iff (!rsync_rst_n) 
+        !(r_en && empty))
+        else $error("Cannot read from FIFO while empty.");
+    assert property ((@posedge wclk) disable iff (!wsync_rst_n) 
+        !(w_en && full))
+        else $error("Cannot write to FIFO while full.");
 
 endmodule

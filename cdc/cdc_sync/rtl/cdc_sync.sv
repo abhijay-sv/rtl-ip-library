@@ -9,6 +9,13 @@ module cdc_sync
     output logic [WIDTH-1:0] sync_out
 );
 
+    initial begin
+        assert (WIDTH > 0)
+            else $fatal("WIDTH must be at least one bit.")
+        assert (SYNC_STAGES >= 2)
+            else $fatal("SYNC_STAGES must be greater than or equal to two.")
+    end
+
     logic [WIDTH-1:0] sync_regs [SYNC_STAGES];
 
     assign sync_out = sync_regs[SYNC_STAGES-1];

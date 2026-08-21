@@ -7,6 +7,11 @@ module rst_sync
     output logic sync_rst_n
 );
 
+    initial begin
+        assert (SYNC_STAGES >= 2)
+            else $fatal("SYNC_STAGES must be greater than or equal to two.")
+    end
+
     logic sync_regs [SYNC_STAGES];
 
     assign sync_rst_n = sync_regs[SYNC_STAGES-1];

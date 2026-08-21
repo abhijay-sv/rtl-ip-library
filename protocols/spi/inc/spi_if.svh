@@ -1,7 +1,6 @@
 interface spi_if();
 
-    logic sclk, miso, mosi
-    
+    logic sclk, miso, mosi;
 
     modport manager (
         input miso,

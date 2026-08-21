@@ -1,5 +1,5 @@
 `include "apb_if.svh"
-
+//TODO: add assertions
 module apb_manager
 #(
     parameter ADDR_WIDTH = 32,
@@ -19,6 +19,7 @@ module apb_manager
 
     apb_if.manager apb
 );
+
     typedef enum logic [1:0] {IDLE, SETUP, ACCESS} manager_state;
 
     logic busy;
